@@ -182,10 +182,19 @@ bye:
     free(upath);
 }
 
+#ifdef __FreeBSD__
+/*
+ * FreeBSD makes the pointer constant, -Wincompatible-function-pointer-types
+ * will complain. Would be better as an configure-time check.
+ */ 
+static int
+fs_filename_compare(const FTSENT *const *a, const FTSENT *const *b)
+#else
+/* But we can't downgrade the constiness either on other platforms. */
 static int
 fs_filename_compare(const FTSENT **a, const FTSENT **b)
+#endif
 {
-
     return strcasecmp((*a)->fts_name, (*b)->fts_name);
 }
 
