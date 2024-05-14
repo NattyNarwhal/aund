@@ -1,5 +1,4 @@
-name: C/C++ CI
-
+name: aund smoke test
 on:
   push:
     branches: [ "master" ]
@@ -7,17 +6,29 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
-
+  linux-build:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
+    - name: regenerate autoconf
+      run: autoreconf -fiv .
+    - name: configure
+      run: ./configure
     - name: configure
       run: ./configure
     - name: make
       run: make
-    - name: make check
-      run: make check
     - name: make distcheck
       run: make distcheck
+  macos-build:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: regenerate autoconf
+      run: autoreconf -fiv .
+    - name: configure
+      run: ./configure
+    - name: configure
+      run: ./configure
+    - name: make
+      run: make
