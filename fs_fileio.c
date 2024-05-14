@@ -41,6 +41,7 @@
 #include <err.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <inttypes.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -376,19 +377,9 @@ fs_get_args(struct fs_context *c)
             fs_err(c, EC_FS_E_BADARGS);
             return;
         }
-        // Differences between apple uint64_t and linux
-        // removes complier warning
-        #ifdef __APPLE__
         if (debug)
-            printf(" <- %llu\n",
+            printf(" <- %"PRIu64"\n",
                 fs_read_val(reply.val, sizeof(reply.val)));
-        #endif
-            
-        #ifdef __LINUX__
-        if (debug)
-            printf(" <- %lu\n",
-                fs_read_val(reply.val, sizeof(reply.val)));
-        #endif    
 
         if (c->req->function == EC_FS_FUNC_GET_ARGS) {
             reply.std_tx.command_code = EC_FS_CC_DONE;
